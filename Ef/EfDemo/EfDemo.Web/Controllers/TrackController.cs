@@ -39,11 +39,12 @@ namespace EfDemo.Web.Controllers
 
         // POST: Track/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Track track)
         {
             try
             {
-                var x = _cdModel.AddTrackToCd(track.CDId, track);
+                _cdModel.AddTrackToCd(track.CDId, track);
 
                 return RedirectToAction("Index", new {track.CDId});
             }
@@ -62,15 +63,16 @@ namespace EfDemo.Web.Controllers
 
         // POST: Track/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Track track)
         {
             try
             {
-                var cdId = _cdModel.Save(track);
+                _cdModel.Save(track);
 
-                return RedirectToAction("Index", new {id = cdId});
+                return RedirectToAction("Index", new {id = track.CDId});
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return View();
             }
@@ -79,18 +81,20 @@ namespace EfDemo.Web.Controllers
         // GET: Track/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var track = _cdModel.GetTrackDetails(id);
+            return View(track);
         }
 
         // POST: Track/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, Track track)
         {
             try
             {
-                // TODO: Add delete logic here
+                _cdModel.Delete(track);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new {id = track.CDId});
             }
             catch
             {

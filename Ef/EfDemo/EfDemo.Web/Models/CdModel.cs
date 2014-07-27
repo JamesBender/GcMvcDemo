@@ -11,7 +11,7 @@ namespace EfDemo.Web.Models
 {
     public class CdModel
     {
-        private MediaManagerEntities _db;
+        private readonly MediaManagerEntities _db;
 
         public CdModel()
         {
@@ -110,22 +110,21 @@ namespace EfDemo.Web.Models
             _db.SaveChanges();            
         }
 
-        public bool Delete(CD cd)
+        public void Delete(CD cd)
         {
             var entity = _db.CDs.Find(cd.Id);
             _db.CDs.Remove(entity);
-            _db.SaveChanges();
-            return true;
+            _db.SaveChanges();            
         }
 
-        public int AddTrackToCd(int? CdId, Track track)
+        public int AddTrackToCd(int? cdId, Track track)
         {
-            var cdEntity = GetCdEntityFromDataContext(CdId);
+            var cdEntity = GetCdEntityFromDataContext(cdId);
             var trackEntity = new Data.Track
             {
                 Artist = track.Artist,
                 CD = cdEntity,
-                CDId = CdId,
+                CDId = cdId,
                 Id = -1,
                 Length = track.Length,
                 Name = track.Name
@@ -162,7 +161,7 @@ namespace EfDemo.Web.Models
             return trackModel;
         }
 
-        public int? Save(Track track)
+        public void Save(Track track)
         {
             var entity = _db.Tracks.FirstOrDefault(x => x.Id == track.Id);
 
@@ -181,8 +180,13 @@ namespace EfDemo.Web.Models
 
             _db.Entry(entity).State = EntityState.Modified;
             _db.SaveChanges();
+        }
 
-            return entity.CDId;
+        public void Delete(Track track)
+        {
+            var entity = _db.Tracks.Find(track.Id);
+            _db.Tracks.Remove(entity);
+            _db.SaveChanges();            
         }
     }
 }
