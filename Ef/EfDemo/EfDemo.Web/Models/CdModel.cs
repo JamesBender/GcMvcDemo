@@ -141,5 +141,48 @@ namespace EfDemo.Web.Models
             _db.SaveChanges();
             return trackEntity.Id;
         }
+
+        public Track GetTrackDetails(int id)
+        {
+            var trackEntity = _db.Tracks.FirstOrDefault(track => track.Id == id);
+            if (trackEntity == null)
+            {
+                throw new ObjectNotFoundException("The requested Track is not in the databse");
+            }
+
+            var trackModel = new Track
+            {
+                Artist = trackEntity.Artist,
+                CDId = trackEntity.CDId,
+                Id = trackEntity.Id,
+                Length = trackEntity.Length,
+                Name = trackEntity.Name
+            };
+
+            return trackModel;
+        }
+
+        public int? Save(Track track)
+        {
+            var entity = _db.Tracks.FirstOrDefault(x => x.Id == track.Id);
+
+            if (entity == null)
+            {
+                throw new ObjectNotFoundException("The requested track is not in the databse");
+            }
+
+            var cdEntity = GetCdEntityFromDataContext(entity.CDId);
+
+            entity.Artist = track.Artist;
+            entity.CD = cdEntity;
+            entity.CDId = cdEntity.Id;
+            entity.Length = track.Length;
+            entity.Name = track.Name;
+
+            _db.Entry(entity).State = EntityState.Modified;
+            _db.SaveChanges();
+
+            return entity.CDId;
+        }
     }
 }

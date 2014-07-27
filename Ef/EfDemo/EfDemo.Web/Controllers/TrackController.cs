@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using EfDemo.Web.Models;
 using EfDemo.Web.Models.ViewModels;
@@ -11,7 +7,7 @@ namespace EfDemo.Web.Controllers
 {
     public class TrackController : Controller
     {
-        private CdModel _cdModel;
+        private readonly CdModel _cdModel;
 
         public TrackController()
         {
@@ -19,21 +15,19 @@ namespace EfDemo.Web.Controllers
         }
 
         // GET: Track
-        public ActionResult Index(int? cdId)
+        public ActionResult Index(int? id)
         {
-            var cd = _cdModel.GetCdDetails(cdId);
-            if (cd.Tracks == null)
-            {
-                cd.Tracks = new Collection<Track>();
-            }
-            ViewBag.CdId = cdId;
+            var cd = _cdModel.GetCdDetails(id);
+
+            ViewBag.CdId = id;
             return View(cd.Tracks);
         }
 
         // GET: Track/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var track = _cdModel.GetTrackDetails(id);
+            return View(track);
         }
 
         // GET: Track/Create
@@ -45,7 +39,6 @@ namespace EfDemo.Web.Controllers
 
         // POST: Track/Create
         [HttpPost]
-//        public ActionResult Create(FormCollection collection)
         public ActionResult Create(Track track)
         {
             try
@@ -63,20 +56,21 @@ namespace EfDemo.Web.Controllers
         // GET: Track/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var track = _cdModel.GetTrackDetails(id);
+            return View(track);
         }
 
         // POST: Track/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Track track)
         {
             try
             {
-                // TODO: Add update logic here
+                var cdId = _cdModel.Save(track);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new {id = cdId});
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
