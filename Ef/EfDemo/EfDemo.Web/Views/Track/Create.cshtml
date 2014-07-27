@@ -1,10 +1,10 @@
 ﻿@model EfDemo.Web.Models.ViewModels.Track
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Create Track for " + @Model.CD.Title + " by " + @Model.CD.Artist;
 }
 
-<h2>Create CD Id: @Model.CDId</h2>
+<h2>Create Track for @Model.CD.Title by @Model.CD.Artist</h2>
 
 
 @using (Html.BeginForm()) 

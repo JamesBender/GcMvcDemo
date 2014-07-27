@@ -20,6 +20,8 @@ namespace EfDemo.Web.Controllers
             var cd = _cdModel.GetCdDetails(id);
 
             ViewBag.CdId = id;
+            ViewBag.CdTitle = cd.Title;
+            ViewBag.Artist = cd.Artist;
             return View(cd.Tracks);
         }
 
@@ -33,7 +35,8 @@ namespace EfDemo.Web.Controllers
         // GET: Track/Create
         public ActionResult Create(int? id)
         {
-            var track = new Track {CDId = id};
+            var cd = _cdModel.GetCdDetails(id);
+            var track = new Track {CDId = id, CD = cd};
             return View(track);
         }
 

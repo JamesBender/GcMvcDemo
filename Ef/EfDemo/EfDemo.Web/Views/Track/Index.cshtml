@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<EfDemo.Web.Models.ViewModels.Track>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tracks for " + ViewBag.CdTitle + " by " + ViewBag.Artist;
 }
 
-<h2>Index</h2>
+<h2>Track for @ViewBag.CdTitle by @ViewBag.Artist</h2>
 
 <p>
     @Html.ActionLink("Create New Track", "Create", new {id = @ViewBag.CdId}) |
