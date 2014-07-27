@@ -162,6 +162,7 @@
     <Compile Include="Controllers\CDController.cs" />
     <Compile Include="Controllers\DVDController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TrackController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -234,6 +235,7 @@
     <Content Include="Views\CD\Create.cshtml" />
     <Content Include="Views\CD\Edit.cshtml" />
     <Content Include="Views\CD\Delete.cshtml" />
+    <Content Include="Views\Track\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

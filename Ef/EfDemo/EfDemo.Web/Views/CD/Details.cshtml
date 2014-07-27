@@ -45,6 +45,8 @@
     </dl>
 </div>
 <p>
+    <a href="/Track/Create/@Model.Id">Add Track</a> |
+    @Html.ActionLink("Add Track", "Create", "Track", null, new { id = 55 }) |
     @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

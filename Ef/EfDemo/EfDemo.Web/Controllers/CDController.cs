@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Net;
 using System.Web.Mvc;
-using EfDemo.Data;
 using EfDemo.Web.Models;
 
 namespace EfDemo.Web.Controllers
 {
     public class CDController : Controller
     {
-        private CdModel _model;
+        private readonly CdModel _model;
 
         public CDController()
         {
@@ -26,8 +22,13 @@ namespace EfDemo.Web.Controllers
         }
 
         // GET: CD/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var cd = _model.GetCdDetails(id);
             return View(cd);
         }
@@ -40,6 +41,7 @@ namespace EfDemo.Web.Controllers
 
         // POST: CD/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(Models.ViewModels.CD cd)
         {
             try
@@ -55,15 +57,20 @@ namespace EfDemo.Web.Controllers
         }
 
         // GET: CD/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit(int? id)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             var cd = _model.GetCdDetails(id);
             return View(cd);
         }
 
         // POST: CD/Edit/5
         [HttpPost]
-//        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
         public ActionResult Edit(int id, Models.ViewModels.CD cd)
         {
             try
@@ -87,12 +94,17 @@ namespace EfDemo.Web.Controllers
 
         // POST: CD/Delete/5
         [HttpPost]
-//        public ActionResult Delete(int id, FormCollection collection)
-        public ActionResult Delete(int id, Models.ViewModels.CD cd)
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int? id, Models.ViewModels.CD cd)
         {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
             try
             {
-                var result = _model.Delete(cd);
+                _model.Delete(cd);
 
                 return RedirectToAction("Index");
             }

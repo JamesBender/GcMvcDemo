@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
 using System.Linq;
 using EfDemo.Data;
 using CD = EfDemo.Web.Models.ViewModels.CD;
@@ -40,13 +41,13 @@ namespace EfDemo.Web.Models
             return listOfModelCd;
         }
 
-        public CD GetCdDetails(int id)
+        public CD GetCdDetails(int? id)
         {
             var entity = _db.CDs.FirstOrDefault(x => x.Id == id);
             
             if (entity == null)
             {
-                return new CD();
+                throw new ObjectNotFoundException("The requested CD is not in the databse");
             }
 
             var model = new CD
@@ -68,16 +69,21 @@ namespace EfDemo.Web.Models
             return x.Id;
         }
 
-        public int Save(CD cd)
+        public void Save(CD cd)
         {
             var entity = _db.CDs.FirstOrDefault(x => x.Id == cd.Id);
+
+            if (entity == null)
+            {
+                throw new ObjectNotFoundException("The requested CD is not in the databse");
+            }
+
             entity.Artist = cd.Artist;
             entity.Genre = cd.Genre;
             entity.Title = cd.Title;
             entity.Year = cd.Year;
-            var y = _db.Entry(entity).State = EntityState.Modified;
-            _db.SaveChanges();
-            return entity.Id;
+            _db.Entry(entity).State = EntityState.Modified;
+            _db.SaveChanges();            
         }
 
         public bool Delete(CD cd)
