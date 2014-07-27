@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Linq;
 using EfDemo.Data;
 using CD = EfDemo.Web.Models.ViewModels.CD;
+using Track = EfDemo.Web.Models.ViewModels.Track;
 
 namespace EfDemo.Web.Models
 {
@@ -43,12 +45,7 @@ namespace EfDemo.Web.Models
 
         public CD GetCdDetails(int? id)
         {
-            var entity = _db.CDs.FirstOrDefault(x => x.Id == id);
-            
-            if (entity == null)
-            {
-                throw new ObjectNotFoundException("The requested CD is not in the databse");
-            }
+            var entity = GetCdEntityFromDataContext(id);
 
             var model = new CD
             {
@@ -58,7 +55,34 @@ namespace EfDemo.Web.Models
                 Title = entity.Title,
                 Year = entity.Year
             };
+            if (model.Tracks == null)
+            {
+                model.Tracks = new Collection<Track>();
+            }
+            foreach (var track in entity.Tracks)
+            {
+                model.Tracks.Add(new Track
+                {
+                    Artist = track.Artist,
+                    CD = model,
+                    CDId = model.Id,
+                    Id = track.Id,
+                    Length = track.Length,
+                    Name = track.Name
+                });
+            }
             return model;
+        }
+
+        private Data.CD GetCdEntityFromDataContext(int? id)
+        {
+            var entity = _db.CDs.FirstOrDefault(x => x.Id == id);
+
+            if (entity == null)
+            {
+                throw new ObjectNotFoundException("The requested CD is not in the databse");
+            }
+            return entity;
         }
 
         public int Create(CD cd)
@@ -92,6 +116,30 @@ namespace EfDemo.Web.Models
             _db.CDs.Remove(entity);
             _db.SaveChanges();
             return true;
+        }
+
+        public int AddTrackToCd(int? CdId, Track track)
+        {
+            var cdEntity = GetCdEntityFromDataContext(CdId);
+            var trackEntity = new Data.Track
+            {
+                Artist = track.Artist,
+                CD = cdEntity,
+                CDId = CdId,
+                Id = -1,
+                Length = track.Length,
+                Name = track.Name
+            };
+
+            if (cdEntity.Tracks == null)
+            {
+                cdEntity.Tracks = new Collection<Data.Track>();
+            }
+
+            cdEntity.Tracks.Add(trackEntity);
+            _db.Entry(cdEntity).State = EntityState.Modified;
+            _db.SaveChanges();
+            return trackEntity.Id;
         }
     }
 }

@@ -1,18 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using EfDemo.Web.Models;
 using EfDemo.Web.Models.ViewModels;
 
 namespace EfDemo.Web.Controllers
 {
     public class TrackController : Controller
     {
-        // GET: Track
-        public ActionResult Index()
+        private CdModel _cdModel;
+
+        public TrackController()
         {
-            return View();
+            _cdModel = new CdModel();
+        }
+
+        // GET: Track
+        public ActionResult Index(int? cdId)
+        {
+            var cd = _cdModel.GetCdDetails(cdId);
+            if (cd.Tracks == null)
+            {
+                cd.Tracks = new Collection<Track>();
+            }
+            ViewBag.CdId = cdId;
+            return View(cd.Tracks);
         }
 
         // GET: Track/Details/5
@@ -31,13 +46,13 @@ namespace EfDemo.Web.Controllers
         // POST: Track/Create
         [HttpPost]
 //        public ActionResult Create(FormCollection collection)
-        public ActionResult Create(Track collection)
+        public ActionResult Create(Track track)
         {
             try
             {
-                // TODO: Add insert logic here
+                var x = _cdModel.AddTrackToCd(track.CDId, track);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new {track.CDId});
             }
             catch
             {
