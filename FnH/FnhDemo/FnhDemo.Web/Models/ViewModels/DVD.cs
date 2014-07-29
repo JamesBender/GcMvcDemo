@@ -2,6 +2,7 @@
 {
     public class DVD
     {
+        public int Id { get; set; }
         public int RunningTime { get; set; }
         public bool IsSpecialEdition { get; set; }
         public string Synopsis { get; set; }

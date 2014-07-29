@@ -35,5 +35,13 @@ namespace FnhDemo.Data
                 }
             }
         }
+
+        public T GetById(int id)
+        {
+            using (var session = _sessionFactory.OpenSession())
+            {
+                return session.Get<T>(id);
+            }
+        }
     }
 }

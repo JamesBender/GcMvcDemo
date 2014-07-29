@@ -27,7 +27,8 @@ namespace FnhDemo.Web.Controllers
         // GET: DVD/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var dvd = _dvdModel.GetDvd(id);
+            return View(dvd);
         }
 
         // GET: DVD/Create

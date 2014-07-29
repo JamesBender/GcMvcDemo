@@ -21,5 +21,11 @@ namespace FnhDemo.Web.Models
             var listOfDvdEntities = _repository.All;
             return listOfDvdEntities.Select(Mapper.Map<Data.Entities.DVD, DVD>).ToList();
         }
+
+        public DVD GetDvd(int id)
+        {
+            var dvd = _repository.GetById(id);
+            return Mapper.Map<Data.Entities.DVD, DVD>(dvd);
+        }
     }
 }
