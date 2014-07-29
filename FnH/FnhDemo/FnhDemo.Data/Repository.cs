@@ -43,5 +43,22 @@ namespace FnhDemo.Data
                 return session.Get<T>(id);
             }
         }
+
+        public void Save(T entity)
+        {
+            using (var session = _sessionFactory.OpenSession())
+            {
+                if (entity.Id == 0)
+                {
+                    session.Save(entity);
+                }
+                else
+                {
+                    session.Merge(entity);
+                }
+                session.Flush();
+                session.Evict(entity);
+            }
+        }
     }
 }

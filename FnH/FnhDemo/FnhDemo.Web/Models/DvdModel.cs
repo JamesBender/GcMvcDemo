@@ -27,5 +27,11 @@ namespace FnhDemo.Web.Models
             var dvd = _repository.GetById(id);
             return Mapper.Map<Data.Entities.DVD, DVD>(dvd);
         }
+
+        public void Save(DVD dvd)
+        {
+            var dvdEntity = Mapper.Map<DVD, Data.Entities.DVD>(dvd);
+            _repository.Save(dvdEntity);
+        }
     }
 }

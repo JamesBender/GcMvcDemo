@@ -231,6 +231,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\DVD\Index.cshtml" />
     <Content Include="Views\DVD\Details.cshtml" />
+    <Content Include="Views\DVD\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

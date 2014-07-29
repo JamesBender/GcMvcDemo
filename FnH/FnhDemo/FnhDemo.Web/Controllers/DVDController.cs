@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FnhDemo.Web.Models;
+using FnhDemo.Web.Models.ViewModels;
 
 namespace FnhDemo.Web.Controllers
 {
@@ -39,11 +40,11 @@ namespace FnhDemo.Web.Controllers
 
         // POST: DVD/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(DVD dvd)
         {
             try
             {
-                // TODO: Add insert logic here
+                _dvdModel.Save(dvd);
 
                 return RedirectToAction("Index");
             }
