@@ -232,6 +232,7 @@
     <Content Include="Views\DVD\Index.cshtml" />
     <Content Include="Views\DVD\Details.cshtml" />
     <Content Include="Views\DVD\Create.cshtml" />
+    <Content Include="Views\DVD\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

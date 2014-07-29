@@ -57,16 +57,17 @@ namespace FnhDemo.Web.Controllers
         // GET: DVD/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var dvd = _dvdModel.GetDvd(id);
+            return View(dvd);
         }
 
         // POST: DVD/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, DVD dvd)
         {
             try
             {
-                // TODO: Add update logic here
+                _dvdModel.Save(dvd);
 
                 return RedirectToAction("Index");
             }
