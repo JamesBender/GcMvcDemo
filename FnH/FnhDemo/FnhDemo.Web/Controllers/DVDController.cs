@@ -80,16 +80,17 @@ namespace FnhDemo.Web.Controllers
         // GET: DVD/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var dvd = _dvdModel.GetDvd(id);
+            return View(dvd);
         }
 
         // POST: DVD/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, DVD dvd)
         {
             try
             {
-                // TODO: Add delete logic here
+                _dvdModel.Delete(id);
 
                 return RedirectToAction("Index");
             }

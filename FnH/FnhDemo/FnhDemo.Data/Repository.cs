@@ -60,5 +60,16 @@ namespace FnhDemo.Data
                 session.Evict(entity);
             }
         }
+
+        public void Delete(int id)
+        {
+            var dvd = GetById(id);
+            using (var session = _sessionFactory.OpenSession())
+            {
+                session.Delete(dvd);
+                session.Flush();
+                session.Evict(dvd);
+            }
+        }
     }
 }

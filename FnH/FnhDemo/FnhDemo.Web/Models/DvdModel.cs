@@ -33,5 +33,10 @@ namespace FnhDemo.Web.Models
             var dvdEntity = Mapper.Map<DVD, Data.Entities.DVD>(dvd);
             _repository.Save(dvdEntity);
         }
+
+        public void Delete(int id)
+        {
+            _repository.Delete(id);
+        }
     }
 }
