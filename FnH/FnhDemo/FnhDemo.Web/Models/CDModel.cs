@@ -23,5 +23,22 @@ namespace FnhDemo.Web.Models
             var listOfCdEntity = _repository.All;
             return listOfCdEntity.Select(Mapper.Map<Data.Entities.CD, CD>).ToList();
         }
+
+        public CD GetCd(int id)
+        {
+            var cdEntity = _repository.GetById(id);
+            return Mapper.Map<Data.Entities.CD, CD>(cdEntity);
+        }
+
+        public void Save(CD cd)
+        {
+            var cdEntity = Mapper.Map<CD, Data.Entities.CD>(cd);
+            _repository.Save(cdEntity);
+        }
+
+        public void Delete(int id)
+        {
+            _repository.Delete(id);
+        }
     }
 }

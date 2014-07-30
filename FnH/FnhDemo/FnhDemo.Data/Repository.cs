@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using FnhDemo.Data.Entities;
@@ -8,7 +10,7 @@ using NHibernate;
 
 namespace FnhDemo.Data
 {
-    public class Repository<T> where T: BaseEntity
+    public class Repository<T> where T : BaseEntity
     {
         private ISessionFactory _sessionFactory;
 
@@ -21,6 +23,7 @@ namespace FnhDemo.Data
                             c.Is(
                                 ConfigurationManager.ConnectionStrings["FnhDemo"]
                                     .ToString())))
+                                    .ExposeConfiguration(x => x.SetInterceptor(new SqlStatementInterceptor()))
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<BaseEntity>())
                 .BuildSessionFactory();
         }
@@ -70,6 +73,16 @@ namespace FnhDemo.Data
                 session.Flush();
                 session.Evict(dvd);
             }
+        }
+    }
+
+    public class SqlStatementInterceptor : EmptyInterceptor
+    {
+        public override NHibernate.SqlCommand.SqlString OnPrepareStatement(NHibernate.SqlCommand.SqlString sql)
+        {
+            Trace.WriteLine(sql.ToString());
+            Debug.WriteLine(sql.ToString());
+            return sql;
         }
     }
 }

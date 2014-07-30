@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FnhDemo.Web.Models;
+using FnhDemo.Web.Models.ViewModels;
+using Track = FnhDemo.Data.Entities.Track;
 
 namespace FnhDemo.Web.Controllers
 {
@@ -27,7 +29,8 @@ namespace FnhDemo.Web.Controllers
         // GET: CD/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var cd = _cdModel.GetCd(id);
+            return View(cd);
         }
 
         // GET: CD/Create
@@ -38,11 +41,11 @@ namespace FnhDemo.Web.Controllers
 
         // POST: CD/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(CD cd)
         {
             try
             {
-                // TODO: Add insert logic here
+                _cdModel.Save(cd);
 
                 return RedirectToAction("Index");
             }
@@ -55,16 +58,17 @@ namespace FnhDemo.Web.Controllers
         // GET: CD/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var cd = _cdModel.GetCd(id);
+            return View(cd);
         }
 
         // POST: CD/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, CD cd)
         {
             try
             {
-                // TODO: Add update logic here
+                _cdModel.Save(cd);
 
                 return RedirectToAction("Index");
             }
@@ -77,16 +81,17 @@ namespace FnhDemo.Web.Controllers
         // GET: CD/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var cd = _cdModel.GetCd(id);
+            return View(cd);
         }
 
         // POST: CD/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, CD cd)
         {
             try
             {
-                // TODO: Add delete logic here
+                _cdModel.Delete(id);
 
                 return RedirectToAction("Index");
             }
