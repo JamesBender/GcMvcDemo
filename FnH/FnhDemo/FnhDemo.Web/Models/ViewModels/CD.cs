@@ -10,6 +10,6 @@ namespace FnhDemo.Web.Models.ViewModels
         public string Genre { get; set; }
         public int Year { get; set; }
 
-        public IList<Data.Entities.Track> Tracks { get; set; }  
+        public IList<Track> Tracks { get; set; }  
     }
 }

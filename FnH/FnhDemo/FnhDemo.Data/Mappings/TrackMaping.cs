@@ -11,7 +11,7 @@ namespace FnhDemo.Data.Mappings
             Map(x => x.Artist);
             Map(x => x.Length);
             Map(x => x.Name);
-            References(x => x.CD).Column("Id");
+            References(x => x.CD).Column("CDId").Not.LazyLoad().Nullable();
         }
     }
 }
