@@ -7,5 +7,6 @@
         public int Length { get; set; }
         public string Artist { get; set; }
         public CD CD { get; set; }
+        public int CdId { get; set; }
     }
 }

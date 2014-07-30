@@ -10,7 +10,8 @@ namespace FnhDemo.Web.Models
             Mapper.CreateMap<ViewModels.DVD, Data.Entities.DVD>();
             Mapper.CreateMap<Data.Entities.CD, ViewModels.CD>();
             Mapper.CreateMap<ViewModels.CD, Data.Entities.CD>();
-            Mapper.CreateMap<Data.Entities.Track, ViewModels.Track>();
+            Mapper.CreateMap<Data.Entities.Track, ViewModels.Track>()
+                .ForMember(x => x.CdId, o => o.Ignore());
             Mapper.CreateMap<ViewModels.Track, Data.Entities.Track>();
         }
     }

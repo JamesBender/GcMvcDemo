@@ -49,18 +49,26 @@ namespace FnhDemo.Data
 
         public void Save(T entity)
         {
-            using (var session = _sessionFactory.OpenSession())
+            try
             {
-                if (entity.Id == 0)
+                using (var session = _sessionFactory.OpenSession())
                 {
-                    session.Save(entity);
+                    if (entity.Id == 0)
+                    {
+                        session.Save(entity);
+                    }
+                    else
+                    {
+                        session.Merge(entity);
+                    }
+                    session.Flush();
+                    session.Evict(entity);
                 }
-                else
-                {
-                    session.Merge(entity);
-                }
-                session.Flush();
-                session.Evict(entity);
+            }
+            catch (Exception ex)
+            {
+                var message = ex.Message;
+                throw;
             }
         }
 

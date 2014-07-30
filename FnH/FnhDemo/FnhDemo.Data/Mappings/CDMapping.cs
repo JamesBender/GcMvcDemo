@@ -21,7 +21,7 @@ namespace FnhDemo.Data.Mappings
             Map(x => x.Title);
             Map(x => x.Genre);
             Map(x => x.Year);
-            HasMany(x => x.Tracks).KeyColumn("CDId").Not.LazyLoad().Inverse();
+            HasMany(x => x.Tracks).KeyColumn("CDId").Not.LazyLoad().Cascade.All().Inverse();
 
         } 
     }

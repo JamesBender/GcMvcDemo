@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FnhDemo.Web.Models;
+using FnhDemo.Web.Models.ViewModels;
 
 namespace FnhDemo.Web.Controllers
 {
@@ -31,24 +32,26 @@ namespace FnhDemo.Web.Controllers
         // GET: Track/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var track = _cdModel.GetTrackDetails(id);
+            return View(track);
         }
 
         // GET: Track/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
+            var track = new Track {CdId = id};
+            return View(track);
         }
 
         // POST: Track/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Track track)
         {
             try
             {
-                // TODO: Add insert logic here
+                _cdModel.AddTrackToCd(track.CdId, track);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id=track.CdId });
             }
             catch
             {
