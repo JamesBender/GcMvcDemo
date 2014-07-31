@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlDemo.Data", "SqlDemo.Data\SqlDemo.Data.csproj", "{2DB660D3-5C27-442B-A3E0-6643D527A0EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlDemo.Web", "SqlDemo.Web\SqlDemo.Web.csproj", "{09018038-55A6-4B39-9694-5AC3A5D7E4AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2DB660D3-5C27-442B-A3E0-6643D527A0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DB660D3-5C27-442B-A3E0-6643D527A0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DB660D3-5C27-442B-A3E0-6643D527A0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09018038-55A6-4B39-9694-5AC3A5D7E4AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09018038-55A6-4B39-9694-5AC3A5D7E4AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09018038-55A6-4B39-9694-5AC3A5D7E4AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09018038-55A6-4B39-9694-5AC3A5D7E4AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
