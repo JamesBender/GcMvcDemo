@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -71,6 +72,35 @@ namespace FnhDemo.Web.Models
 
             cdEntity.Tracks.Add(trackEntity);
             _cdRepository.Save(cdEntity);
+        }
+
+        public void Save(Track track)
+        {
+            var cd = _cdRepository.GetById(track.CD.Id);
+            var trackEntity = cd.Tracks.FirstOrDefault(x => x.Id == track.Id);
+
+            if (trackEntity == null)
+            {
+                throw new NullReferenceException("The track you are trying to update is not on the current CD");
+            }
+
+            trackEntity.Artist = track.Artist;
+            trackEntity.CD = cd;
+            trackEntity.Length = track.Length;
+            trackEntity.Name = track.Name;
+            
+            //cd.Tracks.Add(trackEntity);
+            _cdRepository.Save(cd);
+        }
+
+        public void Delete(Track track)
+        {
+            if (_trackRepository == null)
+            {
+                _trackRepository = new Repository<Data.Entities.Track>();
+            }
+
+            _trackRepository.Delete(track.Id);
         }
     }
 }
