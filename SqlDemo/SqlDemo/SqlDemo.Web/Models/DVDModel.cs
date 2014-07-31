@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Optimization;
 using SqlDemo.Data.Repositories;
 using SqlDemo.Web.Models.ViewModels;
 
@@ -8,7 +7,7 @@ namespace SqlDemo.Web.Models
 {
     public class DVDModel
     {
-        private DVDRepository _dvdRepository;
+        private readonly DVDRepository _dvdRepository;
 
         public DVDModel()
         {

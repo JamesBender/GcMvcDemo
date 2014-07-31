@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Data.SqlClient;
 using SqlDemo.Data.Entities;
 
 namespace SqlDemo.Data.Repositories
 {
-    public class DVDRepository
+    public class DVDRepository : BaseRepository
     {
-        private readonly SqlConnection _sqlConnection;
-
-        public DVDRepository()
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ToString();
-            _sqlConnection = new SqlConnection(connectionString);
-        }
-
         public IEnumerable<DVD> All
         {
             get
@@ -27,43 +17,42 @@ namespace SqlDemo.Data.Repositories
 
                 const string query =
                     @"Select Id, RunningTime, IsSpecialEdition, Synopsis, Title, Genre, Year from DVD Order By Id";
-                var command = new SqlCommand(query, _sqlConnection);
+                var command = new SqlCommand(query, SqlConnection);
                 var dataReader = command.ExecuteReader();
-                while (dataReader.Read())
+
+                try
                 {
-                    var dvd = new DVD
+                    while (dataReader.Read())
                     {
-                        Id = (int)dataReader["Id"],
-                        RunningTime = (int)dataReader["RunningTime"],
-                        IsSpecialEdition = (bool)dataReader["IsSpecialEdition"],
-                        Synopsis = dataReader["Synopsis"].ToString(),
-                        Title = dataReader["Title"].ToString(),
-                        Genre = dataReader["Genre"].ToString(),
-                        Year = (int)dataReader["Year"]
-                    };
+                        var dvd = new DVD
+                        {
+                            Id = (int)dataReader["Id"],
+                            RunningTime = (int)dataReader["RunningTime"],
+                            IsSpecialEdition = (bool)dataReader["IsSpecialEdition"],
+                            Synopsis = dataReader["Synopsis"].ToString(),
+                            Title = dataReader["Title"].ToString(),
+                            Genre = dataReader["Genre"].ToString(),
+                            Year = (int)dataReader["Year"]
+                        };
 
-                    listOfResult.Add(dvd);
+                        listOfResult.Add(dvd);
+                    }
                 }
-
+                finally
+                {
+                    dataReader.Close();
+                }
                 return listOfResult;
             }
         }
 
-        private void OpenSqlConnection()
-        {
-            if (_sqlConnection.State == ConnectionState.Closed)
-            {
-                _sqlConnection.Open();
-            }
-        }
-
-        public DVD GetById(int Id)
+        public DVD GetById(int id)
         {
             OpenSqlConnection();
             const string query =
                     @"Select Id, RunningTime, IsSpecialEdition, Synopsis, Title, Genre, Year from DVD Where Id = @DvdId";
-            var command = new SqlCommand(query, _sqlConnection);
-            command.Parameters.AddWithValue("@DvdId", Id);
+            var command = new SqlCommand(query, SqlConnection);
+            command.Parameters.AddWithValue("@DvdId", id);
             var dataReader = command.ExecuteReader();
 
             dataReader.Read();
@@ -77,21 +66,14 @@ namespace SqlDemo.Data.Repositories
                 Genre = dataReader["Genre"].ToString(),
                 Year = (int)dataReader["Year"]
             };
+            dataReader.Close();
             return dvd;
         }
 
         public int Save(DVD dvd)
         {
             OpenSqlConnection();
-            int result;
-            if (dvd.Id == 0)
-            {
-                result = InsertDvd(dvd);
-            }
-            else
-            {
-                result = UpdateDvd(dvd);
-            }
+            var result = dvd.Id == 0 ? InsertDvd(dvd) : UpdateDvd(dvd);
             return result;
         }
 
@@ -99,7 +81,7 @@ namespace SqlDemo.Data.Repositories
         {
             const string query = "Update DVD Set RunningTime = @RunningTime, IsSpecialEdition = @IsSpecialEdition, Synopsis = @Synopsis, Title = @Title, Genre = @Genre, Year = @Year Where Id = @Id";
 
-            var command = new SqlCommand(query, _sqlConnection);
+            var command = new SqlCommand(query, SqlConnection);
             command.Parameters.AddWithValue("@Id", dvd.Id);
             command.Parameters.AddWithValue("@RunningTime", dvd.RunningTime);
             command.Parameters.AddWithValue("@IsSpecialEdition", dvd.IsSpecialEdition);
@@ -108,15 +90,7 @@ namespace SqlDemo.Data.Repositories
             command.Parameters.AddWithValue("@Genre", dvd.Genre);
             command.Parameters.AddWithValue("@Year", dvd.Year);
 
-            try
-            {
-                command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                var message = ex.Message;
-                throw;
-            }
+            command.ExecuteNonQuery();
 
             return dvd.Id;
         }
@@ -125,7 +99,7 @@ namespace SqlDemo.Data.Repositories
         {
             const string query = "Insert Into DVD(RunningTime, IsSpecialEdition, Synopsis, Title, Genre, Year) Values(@RunningTime, @IsSpecialEdition, @Synopsis, @Title, @Genre, @Year); SELECT CAST(scope_identity() AS int)";
 
-            var command = new SqlCommand(query, _sqlConnection);
+            var command = new SqlCommand(query, SqlConnection);
             command.Parameters.AddWithValue("@RunningTime", dvd.RunningTime);
             command.Parameters.AddWithValue("@IsSpecialEdition", dvd.IsSpecialEdition);
             command.Parameters.AddWithValue("@Synopsis", dvd.Synopsis);
@@ -133,7 +107,7 @@ namespace SqlDemo.Data.Repositories
             command.Parameters.AddWithValue("@Genre", dvd.Genre);
             command.Parameters.AddWithValue("@Year", dvd.Year);
 
-            return (Int32) command.ExecuteScalar();
+            return (Int32)command.ExecuteScalar();
         }
 
         public void Delete(int id)
@@ -141,20 +115,13 @@ namespace SqlDemo.Data.Repositories
             OpenSqlConnection();
 
             const string query = "Delete From DVD Where Id = @Id";
-            var command = new SqlCommand(query, _sqlConnection);
+            var command = new SqlCommand(query, SqlConnection);
 
             command.Parameters.AddWithValue("@Id", id);
 
-            try
-            {
-                command.ExecuteNonQuery();
-            }
-            catch (Exception exception)
-            {
-                var message = exception.Message;
-                throw;
-            }
-        }        
+            command.ExecuteNonQuery();
+
+        }
     }
-    
+
 }

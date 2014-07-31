@@ -159,12 +159,14 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CDController.cs" />
     <Compile Include="Controllers\DVDController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\CDModel.cs" />
     <Compile Include="Models\DVDModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ViewModels\CD.cs" />
@@ -229,6 +231,11 @@
     <Content Include="Views\DVD\Create.cshtml" />
     <Content Include="Views\DVD\Edit.cshtml" />
     <Content Include="Views\DVD\Delete.cshtml" />
+    <Content Include="Views\CD\Index.cshtml" />
+    <Content Include="Views\CD\Details.cshtml" />
+    <Content Include="Views\CD\Create.cshtml" />
+    <Content Include="Views\CD\Edit.cshtml" />
+    <Content Include="Views\CD\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

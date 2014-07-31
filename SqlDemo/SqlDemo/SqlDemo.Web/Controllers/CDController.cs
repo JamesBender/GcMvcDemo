@@ -4,42 +4,42 @@ using SqlDemo.Web.Models.ViewModels;
 
 namespace SqlDemo.Web.Controllers
 {
-    public class DVDController : Controller
+    public class CDController : Controller
     {
-        private readonly DVDModel _dvdModel;
+        private CDModel _cdModel;
 
-        public DVDController()
+        public CDController()
         {
-            _dvdModel = new DVDModel();
+            _cdModel = new CDModel();
         }
 
-        // GET: DVD
+        // GET: CD
         public ActionResult Index()
         {
-            var listOfDVD = _dvdModel.GetListOfAllDVD();
-            return View(listOfDVD);
+            var listOfCd = _cdModel.GetListOfAllCD();
+            return View(listOfCd);
         }
 
-        // GET: DVD/Details/5
+        // GET: CD/Details/5
         public ActionResult Details(int id)
         {
-            var dvd = _dvdModel.GetDvdDetails(id);
-            return View(dvd);
+            var cd = _cdModel.GetCdDetails(id);
+            return View(cd);
         }
 
-        // GET: DVD/Create
+        // GET: CD/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: DVD/Create
+        // POST: CD/Create
         [HttpPost]
-        public ActionResult Create(DVD dvd)
+        public ActionResult Create(CD cd)
         {
             try
             {
-                _dvdModel.Save(dvd);
+                _cdModel.Save(cd);
 
                 return RedirectToAction("Index");
             }
@@ -49,20 +49,20 @@ namespace SqlDemo.Web.Controllers
             }
         }
 
-        // GET: DVD/Edit/5
+        // GET: CD/Edit/5
         public ActionResult Edit(int id)
         {
-            var dvd = _dvdModel.GetDvdDetails(id);
-            return View(dvd);
+            var cd = _cdModel.GetCdDetails(id);
+            return View(cd);
         }
 
-        // POST: DVD/Edit/5
+        // POST: CD/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, DVD dvd)
+        public ActionResult Edit(int id, CD cd)
         {
             try
             {
-                _dvdModel.Save(dvd);
+                _cdModel.Save(cd);
 
                 return RedirectToAction("Index");
             }
@@ -72,20 +72,20 @@ namespace SqlDemo.Web.Controllers
             }
         }
 
-        // GET: DVD/Delete/5
+        // GET: CD/Delete/5
         public ActionResult Delete(int id)
         {
-            var dvd = _dvdModel.GetDvdDetails(id);
-            return View(dvd);
+            var cd = _cdModel.GetCdDetails(id);
+            return View(cd);
         }
 
-        // POST: DVD/Delete/5
+        // POST: CD/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, DVD dvd)
+        public ActionResult Delete(int id, CD cd)
         {
             try
             {
-                _dvdModel.Delete(dvd);
+                _cdModel.Delete(id);
 
                 return RedirectToAction("Index");
             }

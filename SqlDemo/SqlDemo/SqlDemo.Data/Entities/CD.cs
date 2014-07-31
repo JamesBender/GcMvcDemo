@@ -10,6 +10,6 @@ namespace SqlDemo.Data.Entities
         public string Genre { get; set; }
         public int Year { get; set; }
 
-        public virtual ICollection<Track> Tracks { get; set; }
+        public virtual IList<Track> Tracks { get; set; }
     }
 }
