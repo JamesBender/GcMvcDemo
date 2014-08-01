@@ -7,11 +7,13 @@ namespace SqlDemo.Web.Models
 {
     public class CDModel
     {
+        private readonly TrackRepository _trackRepository;
         private readonly CDRepository _cdRepository;
 
         public CDModel()
         {
             _cdRepository = new CDRepository();
+            _trackRepository = new TrackRepository();
         }
 
         public IEnumerable<CD> GetListOfAllCD()
@@ -91,6 +93,38 @@ namespace SqlDemo.Web.Models
         public void Delete(int id)
         {
             _cdRepository.Delete(id);
+        }
+
+        public Track GetTrackDetails(int id)
+        {
+            var trackEntity = _trackRepository.GetTrackDetails(id);
+
+            var trackModel = MapTrackEntitToTrackModel(trackEntity);
+
+            return trackModel;
+        }
+
+        private static Track MapTrackEntitToTrackModel(Data.Entities.Track trackEntity)
+        {
+            var cdModel = new CD
+            {
+                Artist = trackEntity.CD.Artist,
+                Genre = trackEntity.CD.Genre,
+                Id = trackEntity.CD.Id,
+                Title = trackEntity.CD.Title,
+                Year = trackEntity.CD.Year
+            };
+
+            var trackModel = new Track
+            {
+                Artist = trackEntity.Artist,
+                Id = trackEntity.Id,
+                Length = trackEntity.Length,
+                Name = trackEntity.Name,
+                CD = cdModel
+            };
+            
+            return trackModel;
         }
     }
 }
