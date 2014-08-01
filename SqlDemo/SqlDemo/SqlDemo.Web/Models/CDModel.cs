@@ -13,7 +13,7 @@ namespace SqlDemo.Web.Models
         public CDModel()
         {
             _cdRepository = new CDRepository();
-            _trackRepository = new TrackRepository();
+            _trackRepository = new TrackRepository(_cdRepository);
         }
 
         public IEnumerable<CD> GetListOfAllCD()

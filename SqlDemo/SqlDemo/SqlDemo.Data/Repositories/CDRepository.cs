@@ -10,8 +10,9 @@ namespace SqlDemo.Data.Repositories
 
         public CDRepository()
         {
-            _trackRepository = new TrackRepository();
+            _trackRepository = new TrackRepository(this);
         }
+
         public IEnumerable<CD> All
         {
             get

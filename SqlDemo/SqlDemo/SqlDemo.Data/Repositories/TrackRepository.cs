@@ -9,9 +9,15 @@ namespace SqlDemo.Data.Repositories
     {
         private CDRepository _cdRepository;
 
-        public TrackRepository()
+        public TrackRepository(CDRepository cdRepository)
         {
-            _cdRepository = new CDRepository();
+            // This needs an instacne of the CD repository, 
+            // and the CD repository needs an instance of this.
+            // To avoide a stack overflow issues (circular
+            // creation of objects until I run out of memeory)
+            // I am passing in an instance of CD repository to
+            // this class
+            _cdRepository = cdRepository;
         }
 
         public IList<Track> GetListOfTracksByCd(int cdId)
