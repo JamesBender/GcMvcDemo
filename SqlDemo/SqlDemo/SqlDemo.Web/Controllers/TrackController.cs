@@ -54,9 +54,8 @@ namespace SqlDemo.Web.Controllers
 
                 return RedirectToAction("Index", new { id = track.CD.Id });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                var message = ex.Message;
                 return View();
             }
         }
@@ -64,18 +63,19 @@ namespace SqlDemo.Web.Controllers
         // GET: Track/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var track = _cdModel.GetTrackDetails(id);
+            return View(track);
         }
 
         // POST: Track/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Track track)
         {
             try
             {
-                // TODO: Add update logic here
+                _cdModel.Save(track);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = track.CD.Id });
             }
             catch
             {
@@ -86,18 +86,19 @@ namespace SqlDemo.Web.Controllers
         // GET: Track/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var track = _cdModel.GetTrackDetails(id);
+            return View(track);
         }
 
         // POST: Track/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Track track)
         {
             try
             {
-                // TODO: Add delete logic here
+                _cdModel.DeleteTrack(id);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = track.CD.Id });
             }
             catch
             {

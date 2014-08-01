@@ -136,5 +136,24 @@ namespace SqlDemo.Web.Models
             cdEntity.Tracks.Add(trackEntity);
             _cdRepository.Save(cdEntity);
         }
+
+        public void Save(Track track)
+        {
+            var cdEntity = _cdRepository.GetById(track.CD.Id);
+            var trackEntity = new Data.Entities.Track
+            {
+                Artist = track.Artist,
+                Id = track.Id,
+                Length = track.Length,
+                Name = track.Name,
+                CD = cdEntity
+            };
+            _trackRepository.Save(trackEntity);
+        }
+
+        public void DeleteTrack(int id)
+        {
+            _trackRepository.Delete(id);
+        }
     }
 }
