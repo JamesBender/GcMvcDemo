@@ -35,17 +35,15 @@ namespace SqlDemo.Web.Models
                 Tracks = new List<Track>()
             };
 
-            foreach (var trackEntity in cdEntity.Tracks)
+            foreach (var track in cdEntity.Tracks.Select(trackEntity => new Track
             {
-                var track = new Track
-                {
-                    Id = trackEntity.Id,
-                    Artist = trackEntity.Artist,
-                    Length = trackEntity.Length,
-                    Name = trackEntity.Name,
-                    CD = cd
-                };
-
+                Id = trackEntity.Id,
+                Artist = trackEntity.Artist,
+                Length = trackEntity.Length,
+                Name = trackEntity.Name,
+                CD = cd
+            }))
+            {
                 cd.Tracks.Add(track);
             }
             return cd;
@@ -59,14 +57,7 @@ namespace SqlDemo.Web.Models
 
         public int Save(CD cd)
         {
-            var cdEntity = new Data.Entities.CD
-            {
-                Id = cd.Id,
-                Artist = cd.Artist,
-                Genre = cd.Genre,
-                Title = cd.Title,
-                Year = cd.Year
-            };
+            var cdEntity = MapCDViewModelToCDEntity(cd);
 
             if (cd.Tracks != null)
             {
@@ -88,6 +79,18 @@ namespace SqlDemo.Web.Models
             }
 
             return _cdRepository.Save(cdEntity);
+        }
+
+        private static Data.Entities.CD MapCDViewModelToCDEntity(CD cd)
+        {
+            return new Data.Entities.CD
+            {
+                Id = cd.Id,
+                Artist = cd.Artist,
+                Genre = cd.Genre,
+                Title = cd.Title,
+                Year = cd.Year
+            };
         }
 
         public void Delete(int id)
