@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using SqlDemo.Data.Repositories;
 using SqlDemo.Web.Models.ViewModels;
 
@@ -125,6 +126,15 @@ namespace SqlDemo.Web.Models
             };
             
             return trackModel;
+        }
+
+        public void AddTrackToCD(int id, Track track)
+        {
+            var trackEntity = new Data.Entities.Track {Artist = track.Artist, Length = track.Length, Name = track.Name};
+            var cdEntity = _cdRepository.GetById(id);
+            trackEntity.CD = cdEntity;
+            cdEntity.Tracks.Add(trackEntity);
+            _cdRepository.Save(cdEntity);
         }
     }
 }

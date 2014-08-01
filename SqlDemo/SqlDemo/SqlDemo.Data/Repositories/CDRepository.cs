@@ -132,11 +132,31 @@ namespace SqlDemo.Data.Repositories
                 {
                     foreach (var track in cd.Tracks)
                     {
-                        const string trackQuery = "Update Track Set Name = @Name, Length = @Length, Artist = @Artist Where Id = @Id";
-                        var trackCommand = new SqlCommand(trackQuery, SqlConnection);
+                        if (track.Id == 0)
+                        {
+                            var trackInsertQuery = "Insert Into Track (Name, Length, Artist, CDId) Values(@Name, @Length, @Artist, @CDId); SELECT CAST(scope_identity() AS int)";
+                            var trackInsertCommand = new SqlCommand(trackInsertQuery, SqlConnection);
 
-                        trackCommand.Parameters.AddWithValue("@Id", track.Id);
+                            trackInsertCommand.Parameters.AddWithValue("@Name", track.Name);
+                            trackInsertCommand.Parameters.AddWithValue("@Length", track.Length);
+                            trackInsertCommand.Parameters.AddWithValue("@Artist", track.Artist);
+                            trackInsertCommand.Parameters.AddWithValue("@CDId", cd.Id);
 
+                            var trackId = (int)trackInsertCommand.ExecuteScalar();
+                        }
+                        else
+                        {
+                            const string trackQuery =
+                                "Update Track Set Name = @Name, Length = @Length, Artist = @Artist Where Id = @Id";
+                            var trackCommand = new SqlCommand(trackQuery, SqlConnection);
+
+                            trackCommand.Parameters.AddWithValue("@Id", track.Id);
+                            trackCommand.Parameters.AddWithValue("@Name", track.Name);
+                            trackCommand.Parameters.AddWithValue("@Length", track.Length);
+                            trackCommand.Parameters.AddWithValue("@Artist", track.Artist);
+
+                            trackCommand.ExecuteNonQuery();
+                        }
                     }
                 }
                 id = cd.Id;

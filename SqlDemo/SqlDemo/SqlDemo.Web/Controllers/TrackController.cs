@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using SqlDemo.Data.Entities;
+//using SqlDemo.Data.Entities;
 using SqlDemo.Web.Models;
+using SqlDemo.Web.Models.ViewModels;
 
 namespace SqlDemo.Web.Controllers
 {
     public class TrackController : Controller
     {
-        private CDModel _cdModel;
+        private readonly CDModel _cdModel;
 
         public TrackController()
         {
@@ -36,23 +37,26 @@ namespace SqlDemo.Web.Controllers
         }
 
         // GET: Track/Create
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
-            return View();
+            if (id == null) return View();
+            var track = new Track {CD = new CD {Id = (int) id}};
+            return View(track);
         }
 
         // POST: Track/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Track track)
         {
             try
             {
-                // TODO: Add insert logic here
+                _cdModel.AddTrackToCD(track.CD.Id, track);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", new { id = track.CD.Id });
             }
-            catch
+            catch (Exception ex)
             {
+                var message = ex.Message;
                 return View();
             }
         }
