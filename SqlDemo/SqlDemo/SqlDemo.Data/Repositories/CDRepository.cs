@@ -89,57 +89,24 @@ namespace SqlDemo.Data.Repositories
             int id;
             if (cd.Id == 0)
             {
-                const string query = "Insert Into CD(Artist, Title, Genre, Year) Values(@Artist, @Title, @Genre, @Year); SELECT CAST(scope_identity() AS int)";
-                var command = new SqlCommand(query, SqlConnection);
-
-                command.Parameters.AddWithValue("@Artist", cd.Artist);
-                command.Parameters.AddWithValue("@Title", cd.Title);
-                command.Parameters.AddWithValue("@Genre", cd.Genre);
-                command.Parameters.AddWithValue("@Year", cd.Year);
-
-                id = (int)command.ExecuteScalar();
+                id = InsertCD(cd);
 
                 if (cd.Tracks != null)
                 {
                     foreach (var track in cd.Tracks)
                     {
-                        const string trackQuery = "Insert Into Track (Name, Length, Artist, CDId) Values(@Name, @Length, @Artist, @CDId); SELECT CAST(scope_identity() AS int)";
-                        var trackCommand = new SqlCommand(trackQuery, SqlConnection);
-
-                        trackCommand.Parameters.AddWithValue("@Name", track.Name);
-                        trackCommand.Parameters.AddWithValue("@Length", track.Length);
-                        trackCommand.Parameters.AddWithValue("@Artist", track.Artist);
-                        trackCommand.Parameters.AddWithValue("@CDId", id);
-
-                        trackCommand.ExecuteScalar();
+                        _trackRepository.Save(track);
                     }
                 }
             }
             else
             {
-                const string query = "Update CD Set Artist = @Artist, Title = @Title, Genre = @Genre, Year = @Year Where Id = @Id";
-                var command = new SqlCommand(query, SqlConnection);
-
-                command.Parameters.AddWithValue("@Id", cd.Id);
-                command.Parameters.AddWithValue("@Artist", cd.Artist);
-                command.Parameters.AddWithValue("@Title", cd.Title);
-                command.Parameters.AddWithValue("@Genre", cd.Genre);
-                command.Parameters.AddWithValue("@Year", cd.Year);
-
-                command.ExecuteNonQuery();
+                UpdateCD(cd);
 
                 if (cd.Tracks != null)
                 {
                     foreach (var track in cd.Tracks)
                     {
-//                        if (track.Id == 0)
-//                        {
-//                            InsertTrack(cd.Id, track);
-//                        }
-//                        else
-//                        {
-//                            UpdateTrack(track);
-//                        }
                         _trackRepository.Save(track);
                     }
                 }
@@ -149,33 +116,33 @@ namespace SqlDemo.Data.Repositories
             return id;
         }
 
-//        private void UpdateTrack(Track track)
-//        {
-//            const string trackQuery =
-//                "Update Track Set Name = @Name, Length = @Length, Artist = @Artist Where Id = @Id";
-//            var trackCommand = new SqlCommand(trackQuery, SqlConnection);
-//
-//            trackCommand.Parameters.AddWithValue("@Id", track.Id);
-//            trackCommand.Parameters.AddWithValue("@Name", track.Name);
-//            trackCommand.Parameters.AddWithValue("@Length", track.Length);
-//            trackCommand.Parameters.AddWithValue("@Artist", track.Artist);
-//
-//            trackCommand.ExecuteNonQuery();
-//        }
+        private void UpdateCD(CD cd)
+        {
+            const string query = "Update CD Set Artist = @Artist, Title = @Title, Genre = @Genre, Year = @Year Where Id = @Id";
+            var command = new SqlCommand(query, SqlConnection);
 
-//        private int InsertTrack(int cdId, Track track)
-//        {
-//            var trackInsertQuery =
-//                "Insert Into Track (Name, Length, Artist, CDId) Values(@Name, @Length, @Artist, @CDId); SELECT CAST(scope_identity() AS int)";
-//            var trackInsertCommand = new SqlCommand(trackInsertQuery, SqlConnection);
-//
-//            trackInsertCommand.Parameters.AddWithValue("@Name", track.Name);
-//            trackInsertCommand.Parameters.AddWithValue("@Length", track.Length);
-//            trackInsertCommand.Parameters.AddWithValue("@Artist", track.Artist);
-//            trackInsertCommand.Parameters.AddWithValue("@CDId", cdId);
-//
-//            return (int) trackInsertCommand.ExecuteScalar();
-//        }
+            command.Parameters.AddWithValue("@Id", cd.Id);
+            command.Parameters.AddWithValue("@Artist", cd.Artist);
+            command.Parameters.AddWithValue("@Title", cd.Title);
+            command.Parameters.AddWithValue("@Genre", cd.Genre);
+            command.Parameters.AddWithValue("@Year", cd.Year);
+
+            command.ExecuteNonQuery();
+        }
+
+        private int InsertCD(CD cd)
+        {
+            const string query =
+                "Insert Into CD(Artist, Title, Genre, Year) Values(@Artist, @Title, @Genre, @Year); SELECT CAST(scope_identity() AS int)";
+            var command = new SqlCommand(query, SqlConnection);
+
+            command.Parameters.AddWithValue("@Artist", cd.Artist);
+            command.Parameters.AddWithValue("@Title", cd.Title);
+            command.Parameters.AddWithValue("@Genre", cd.Genre);
+            command.Parameters.AddWithValue("@Year", cd.Year);
+
+            return (int)command.ExecuteScalar();
+        }
 
         public void Delete(int id)
         {

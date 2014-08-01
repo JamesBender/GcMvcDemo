@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using SqlDemo.Data.Entities;
 
@@ -7,7 +6,7 @@ namespace SqlDemo.Data.Repositories
 {
     public class TrackRepository : BaseRepository
     {
-        private CDRepository _cdRepository;
+        private readonly CDRepository _cdRepository;
 
         public TrackRepository(CDRepository cdRepository)
         {
